@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MergeGame</string>
+    <string name="title_activity_main">MergeGame</string>
+    <string name="package_name">com.dipeshthada.mergegame</string>
+    <string name="custom_url_scheme">com.dipeshthada.mergegame</string>
+</resources>
