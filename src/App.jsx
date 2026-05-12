@@ -159,11 +159,12 @@ function ItemDisplay({ item }) {
 // CELL COMPONENT
 // ═══════════════════════════════════════════════════
 function Cell({ cell, isSel, isFlash, isPop, isShake, onClick }) {
-  let cls = '';
-  if (isSel)   cls = 'sel-cell';
-  if (isPop)   cls = 'pop-cell';
-  if (isFlash) cls = 'flash-cell';
-  if (isShake) cls = 'shake-cell';
+  const clsList = [];
+  if (isSel)   clsList.push('sel-cell');
+  if (isPop)   clsList.push('pop-cell');
+  if (isFlash) clsList.push('flash-cell');
+  if (isShake) clsList.push('shake-cell');
+  const cls = clsList.join(' ');
 
   return (
     <div
@@ -499,17 +500,16 @@ export default function App() {
   const goalPct  = Math.min(100, (goalCnt / ldata.goal.count) * 100);
 
   useEffect(() => {
+    if (lvl >= LEVELS.length) return;
     if (goalCnt >= ldata.goal.count && screen === 'game') {
       sndWin();
       setTimeout(() => setScreen('win'), 700);
     }
-  }, [goalCnt, screen]);
+  }, [goalCnt, screen, lvl]);
 
   // ── Particle spawner ───────────────────────────
   function spawnParticles(r, c, tier) {
     if (!gridRef.current) return;
-    const rect = gridRef.current.getBoundingClientRect();
-    const gRect = gridRef.current.getBoundingClientRect();
     const stride = CELL + GAP;
     const cx = c * stride + CELL / 2 + 10;
     const cy = r * stride + CELL / 2 + 10;
@@ -610,9 +610,12 @@ export default function App() {
   }
   function buyCoins(cost, isGems = false) {
     if (gems < cost) return;
-    setGems(g => g - cost);
-    if (isGems) setGems(g => g + 10);
-    else setCoins(c => c + 500);
+    if (isGems) {
+      setGems(g => g - cost + 10);
+    } else {
+      setGems(g => g - cost);
+      setCoins(c => c + 500);
+    }
     sndMerge(2);
   }
 
